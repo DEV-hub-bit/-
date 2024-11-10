@@ -1,26 +1,44 @@
 document.addEventListener("DOMContentLoaded", function() {
     const inputs = document.querySelectorAll(".input-container input");
     let messageTimeout;
+    let errorTimeout;
+    let autoRemoveErrorTimeout;
 
     inputs.forEach((input, index) => {
         input.addEventListener("click", () => {
-            input.value = "";  
+            input.value = "";
+            removeErrorClass();  
+            clearTimeout(errorTimeout);  
+            clearTimeout(autoRemoveErrorTimeout); 
         });
 
         input.addEventListener("input", () => {
             if (input.value.length > 1) {
-                input.value = input.value.slice(0, 1);  
+                input.value = input.value.slice(0, 1);
             }
             if (input.value.length === 1 && index < inputs.length - 1) {
-                inputs[index + 1].focus();  
-                inputs[index + 1].value = "";  
+                inputs[index + 1].focus();
+                inputs[index + 1].value = "";
+            }
+            if (input.value === "") {
+                removeErrorClass();
             }
         });
 
         input.addEventListener("keydown", (event) => {
             if (event.key === "Backspace" && input.value === "" && index > 0) {
-                inputs[index - 1].focus(); 
+                inputs[index - 1].focus();
             }
+        });
+
+        input.addEventListener("focus", () => {
+            if (document.body.classList.contains("error")) {
+                input.classList.add("error");
+            }
+        });
+
+        input.addEventListener("blur", () => {
+            input.classList.remove("error");
         });
     });
 
@@ -39,6 +57,7 @@ function checkPassword() {
 
     if (!digit1 || !digit2 || !digit3 || !digit4) {
         showMessage("Por favor, rellene todos los espacios.");
+        addErrorClass();
         return;
     }
 
@@ -47,7 +66,6 @@ function checkPassword() {
         "5678": "https://www.youtube.com/watch?v=pDXL_8DwyVQ&list=LL&index=23",
         "2222": "https://youtu.be/Op0ls91WDrM?si=NN2Xz_DMmZ0rCo66",
         "1868": "https://www.youtube.com/watch?v=MvUBpzI2ZjQ",
-        "5678": "https://www.youtube.com/watch?v=pDXL_8DwyVQ&list=LL&index=23",
         "6666": "https://www.bible.com/es/bible-verses/146/REV.1.RVC",
         "3333": "https://www.temu.com/mx",
         "6660": "https://www.mangabreria.com/family-guy-peter-griffin",
@@ -91,29 +109,49 @@ function checkPassword() {
         "012e": "https://youtu.be/R6S7oY142ws?si=i-2cMguYSgWRXuZ4",
         "2217": "https://youtu.be/cyNzlsjX-3o?si=kGaQbQtmxTFZhj7e",
         "3321": "https://youtube.com/shorts/XHk2nCAMwoI?si=ScJRlX7HFpBVXjee",
-        "9912": "https://youtu.be/Se1uh3PS78Y?si=1wf2SV7r7SBcEZ6X", 
+        "9912": "https://youtu.be/Se1uh3PS78Y?si=1wf2SV7r7SBcEZ6X",
     };
 
     if (passwordPages[password]) {
         window.location.href = passwordPages[password];
     } else {
+        addErrorClass();
         showMessage("Contraseña incorrecta.");
         clearInputs();
+
+        clearTimeout(errorTimeout);
+        errorTimeout = setTimeout(removeErrorClass, 1000);  
+
+        clearTimeout(autoRemoveErrorTimeout);
+        autoRemoveErrorTimeout = setTimeout(removeErrorClass, 5000);
     }
 }
 
-function showMessage(message) {
-    const messageBox = document.getElementById("messageBox");
-    messageBox.textContent = message;
-    messageBox.style.display = 'block';
+let errorTimeout;
 
-    clearTimeout(messageTimeout);
-    messageTimeout = setTimeout(() => {
-        messageBox.style.display = 'none';
-    }, 1000);
+function addErrorClass() {
+    document.body.classList.add("error");
+    document.querySelector(".input-container").classList.add("error");
+
+
+    document.querySelectorAll(".digit-input").forEach(input => {
+        input.classList.add("error"); 
+
+
+        input.addEventListener("focus", () => input.classList.add("error"));
+    });
+
+    clearTimeout(errorTimeout); 
+    errorTimeout = setTimeout(removeErrorClass, 700);
 }
 
-function clearInputs() {
-    const inputs = document.querySelectorAll(".input-container input");
-    inputs.forEach(input => input.value = "");  
+function removeErrorClass() {
+    document.body.classList.remove("error");
+    document.querySelector(".input-container").classList.remove("error");
+
+
+    document.querySelectorAll(".digit-input").forEach(input => {
+        input.classList.remove("error");
+    });
 }
+
