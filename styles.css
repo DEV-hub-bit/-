@@ -12,6 +12,28 @@ body {
     height: 100vh;
     text-align: center;
 }
+body.error {
+    background: hsl(154, 50%, 5%);
+    color: hsl(0, 100%, 42%);
+    text-shadow: 0 0 5px hsl(0, 100%, 59%);
+}
+.error .digit-input:focus{
+    border-color: hsl(0, 100%, 43%); 
+
+}
+
+.error .digit-input {
+    border-color: rgb(185, 50, 50);
+    color: red;
+    text-shadow: 0 0 10px red;
+}
+
+
+.error #glare {
+    background: radial-gradient(hsl(0, 5%, 15%) 0%, hsl(0, 84%, 5%) 70%);
+}
+
+
 
 pre {
     font-size: clamp(1.2em, 2vw, 1.7em);
@@ -46,10 +68,6 @@ pre {
     background-color: hsla(154, 95%, 17%, 0);
 }
 
-.styled-button:hover {
-    background-color: hsl(154, 50%, 20%);
-    box-shadow: 0 0 10px hsl(154, 84%, 70%);
-}
 
 #glare {
     position: fixed;
@@ -91,12 +109,12 @@ pre {
     }
 
     pre {
-        font-size: clamp(3.5em, 8vw, 4.5em); /* Texto más grande en móviles */
+        font-size: clamp(3.5em, 8vw, 4.5em); 
         padding-top: 10vh;
     }
 
     .digit-input {
-        width: clamp(120px, 35vw, 150px); /* Ancho mayor para inputs en móviles */
-        font-size: clamp(50rem, 12vw, 6rem); /* Texto más grande en los inputs */
+        width: clamp(120px, 35vw, 150px); 
+        font-size: clamp(50rem, 12vw, 6rem); 
     }
 }
